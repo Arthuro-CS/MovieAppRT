@@ -3,6 +3,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="lightGrey">#f5f5f5</color>
+    <color name="red">#dd2c00</color>
+    <color name="darkYellow">#ffbd59</color>
 
     <color name="primaryColor">#616161</color>
     <color name="primaryLightColor">#8e8e8e</color>
