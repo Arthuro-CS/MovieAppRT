@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.cueva.movieapprt.R
@@ -42,8 +44,8 @@ class MoviesFragment : Fragment() {
 
         DaggerMovieComponent.create().inject(this)
 
-        val adapter = MoviesAdapter(MoviesAdapter.OnClickListener{movie->
-            navigateToDetail(movie)
+        val adapter = MoviesAdapter(MoviesAdapter.OnClickListener{movie,image->
+            navigateToDetail(movie,image)
         })
         binding.rvMovies.adapter = adapter
 
@@ -65,7 +67,9 @@ class MoviesFragment : Fragment() {
         return binding.root
     }
 
-    private fun navigateToDetail(movie: MovieApp){
-        findNavController().navigate(MoviesFragmentDirections.actionMoviesFragmentToMovieDetailFragment(movie))
+    private fun navigateToDetail(movie: MovieApp,image: AppCompatImageView){
+        val extras = FragmentNavigatorExtras(image to "movie_poster_${movie.id}")
+        val action = MoviesFragmentDirections.actionMoviesFragmentToMovieDetailFragment(movie)
+        findNavController().navigate(action,extras)
     }
 }

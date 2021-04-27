@@ -1,44 +1,52 @@
 package com.cueva.movieapprt.application.presentation.ui.movies.detail
 
+
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import androidx.transition.TransitionInflater
 import com.cueva.movieapprt.R
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.cueva.movieapprt.application.presentation.util.Utils
+import com.cueva.movieapprt.databinding.FragmentMovieDetailBinding
+import com.google.android.material.appbar.AppBarLayout
 
 
 class MovieDetailFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    lateinit var binding: FragmentMovieDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_movie_detail, container, false)
-    }
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_movie_detail, container, false
+        )
+        activity?.findViewById<AppBarLayout>(R.id.app_bar)?.visibility = AppBarLayout.GONE
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MovieDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        sharedElementEnterTransition = TransitionInflater.from(this.context).inflateTransition(R.transition.change_bounds)
+        sharedElementReturnTransition =  TransitionInflater.from(this.context).inflateTransition(R.transition.change_bounds)
+
+        val movie = MovieDetailFragmentArgs.fromBundle(requireArguments()).selectedMovie
+        ViewCompat.setTransitionName(binding.moviePoster, "movie_poster_${movie.id}")
+
+
+        val viewModelFactory = MovieDetailViewModelFactory(movie)
+        binding.viewModel = ViewModelProvider(this,viewModelFactory).get(MovieDetailViewModel::class.java)
+        Utils.setImage(movie.urlPoster,binding.moviePoster)
+        Utils.setImage(movie.backPoster,binding.movieBackPoster)
+
+        binding.setLifecycleOwner(this)
+
+        return binding.root
     }
 }
