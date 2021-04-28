@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MovieApp</string>
+    <string name="upcoming_films">Upcoming Films</string>
+    <string name="username_label">Usuario</string>
+    <string name="password_label">Contraseña</string>
+    <string name="login_text_button">Login</string>
+    <string name="login_error">Usuario o contraseña incorrecto. Inténtelo nuevamente.</string>
+    <string name="rating_text">Rating: %.1f/10</string>
+    <string name="overview_title">Overview</string>
+</resources>
