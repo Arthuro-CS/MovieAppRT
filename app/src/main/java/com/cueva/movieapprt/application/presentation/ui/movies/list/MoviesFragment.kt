@@ -12,16 +12,17 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import com.cueva.movieapprt.R
 import com.cueva.movieapprt.application.presentation.di.movie.DaggerMovieComponent
+import com.cueva.movieapprt.application.presentation.di.movie.RoomModule
 import com.cueva.movieapprt.application.presentation.entity.MovieApp
 import com.cueva.movieapprt.databinding.FragmentMoviesBinding
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 
 class MoviesFragment : Fragment() {
 
@@ -31,6 +32,7 @@ class MoviesFragment : Fragment() {
 
     lateinit var binding: FragmentMoviesBinding
 
+    @ExperimentalPagingApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,8 +43,7 @@ class MoviesFragment : Fragment() {
 
         activity?.findViewById<AppBarLayout>(R.id.app_bar)?.visibility = AppBarLayout.VISIBLE
 
-
-        DaggerMovieComponent.create().inject(this)
+        DaggerMovieComponent.builder().roomModule(RoomModule(requireActivity().application)).build().inject(this)
 
         val adapter = MoviesAdapter(MoviesAdapter.OnClickListener{movie,image->
             navigateToDetail(movie,image)
@@ -50,7 +51,7 @@ class MoviesFragment : Fragment() {
         binding.rvMovies.adapter = adapter
 
         //Page Adapter
-        movieVieModel.getMoviesPagedLiveData().observe(viewLifecycleOwner, Observer {
+        movieVieModel.getMovies().observe(viewLifecycleOwner, Observer {
             lifecycleScope.launch {
                 adapter.submitData(it)
             }
@@ -67,7 +68,7 @@ class MoviesFragment : Fragment() {
         return binding.root
     }
 
-    private fun navigateToDetail(movie: MovieApp,image: AppCompatImageView){
+    private fun navigateToDetail(movie: MovieApp,image:AppCompatImageView){
         val extras = FragmentNavigatorExtras(image to "movie_poster_${movie.id}")
         val action = MoviesFragmentDirections.actionMoviesFragmentToMovieDetailFragment(movie)
         findNavController().navigate(action,extras)
