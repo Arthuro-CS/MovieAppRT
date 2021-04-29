@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Entity(tableName = "movies")
 @Parcelize
-class MovieApp (
+data class MovieApp (
     val id : Int,
     val urlPoster: String,
     val name: String,
