@@ -69,5 +69,10 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     //paging3
-    implementation 'androidx.paging:paging-runtime:3.0.0-alpha03'
+    implementation "androidx.paging:paging-runtime:$version_paging"
+
+    //Room
+    implementation "androidx.room:room-runtime:$version_room"
+    implementation "androidx.room:room-ktx:$version_room"
+    kapt "androidx.room:room-compiler:$version_room"
 }

@@ -5,7 +5,6 @@ import javax.inject.Inject
 
 class UserDataSource @Inject constructor(): UserApiDataSource {
     override fun loginUser(username: String, password: String): Boolean {
-        return username == "A" && password=="A"
-        //return username == "Admin" && password=="Password*123"
+        return username == "Admin" && password=="Password*123"
     }
 }
